@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "exercise-26.html",
+    "href": "exercise-26.html",
+    "title": "“Exercise 26“",
+    "section": "",
+    "text": "# set up\nlibrary(terra)\n\nterra 1.8.42\n\nlibrary(ggpubr)\n\nLoading required package: ggplot2\n\n\n\nAttaching package: 'ggpubr'\n\n\nThe following object is masked from 'package:terra':\n\n    rotate\n\nlibrary(ggplot2)\n\nurl &lt;- 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/foco-elev-cm.tif'\nvsi_url &lt;- paste0(\"/vsicurl/\", url)\n\nelev_cm &lt;- rast(vsi_url)\n\n\nelev_ft &lt;- elev_cm * 0.0328084\nelev_df &lt;- values(elev_ft, dataframe = TRUE)\ngg_density &lt;- ggdensity(elev_df, \n                        x = names(elev_df)[1], \n                        fill = \"#69b3a2\", \n                        color = \"#1f2d36\",\n                        add = \"mean\", rug = TRUE) +\n  labs(title = \"Elevation Density in Feet\",\n       x = \"Elevation (feet)\",\n       y = \"Density\") +\n  theme_minimal()\n\nWarning: `geom_vline()`: Ignoring `mapping` because `xintercept` was provided.\n\n\nWarning: `geom_vline()`: Ignoring `data` because `xintercept` was provided.\n\nprint(gg_density)\n\n\n\n\n\n\n\nggsave(\"elevation_density_plot.png\", gg_density, width = 8, height = 6)"
+  }
+]

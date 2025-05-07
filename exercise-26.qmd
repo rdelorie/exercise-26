@@ -1,11 +1,37 @@
 ---
-title: "exercise-26"
+title: “Exercise 26“
+author: Rachel Delorie
+format: html
+execute:
+  echo: true
 ---
 
-## Quarto
+```{r}
+# set up
+library(terra)
+library(ggpubr)
+library(ggplot2)
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+url <- 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/foco-elev-cm.tif'
+vsi_url <- paste0("/vsicurl/", url)
+
+elev_cm <- rast(vsi_url)
+```
 
 ```{r}
-1 + 1
+elev_ft <- elev_cm * 0.0328084
+elev_df <- values(elev_ft, dataframe = TRUE)
+gg_density <- ggdensity(elev_df, 
+                        x = names(elev_df)[1], 
+                        fill = "#69b3a2", 
+                        color = "#1f2d36",
+                        add = "mean", rug = TRUE) +
+  labs(title = "Elevation Density in Feet",
+       x = "Elevation (feet)",
+       y = "Density") +
+  theme_minimal()
+
+print(gg_density)
+ggsave("elevation_density_plot.png", gg_density, width = 8, height = 6)
 ```
+
